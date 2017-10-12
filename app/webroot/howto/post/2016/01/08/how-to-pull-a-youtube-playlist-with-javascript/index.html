@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="generator" content="Spress">
+
+    <title>HOW TO: Pull a YouTube playlist with Javascript - Daniel Adelantado</title>
+
+    <link rel="canonical" href="/howto/post/2016/01/08/how-to-pull-a-youtube-playlist-with-javascript/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.min.css">
+
+    <!-- Highlight js CSS -->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css">
+
+    <!-- Custom Fonts -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+  
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-NBSBMQ"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-NBSBMQ');</script>
+<!-- End Google Tag Manager -->
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Daniel Adelantado</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                                <li>
+                    <a href="/about/">About</a>
+                </li>
+                                <li>
+                    <a href="/contact/">Contact Me</a>
+                </li>
+                                <li>
+                    <a href="/examples/">Examples</a>
+                </li>
+                            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+    
+<!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/home-bg.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>HOW TO: Pull a YouTube playlist with Javascript</h1>
+                                        <span class="meta">Posted by  on October 11th at 11:27pm</span>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</header>
+    
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+				<p>The following code will help you to pull a YouTube playlist with Javascript and will update the playlist automatically every time the page loads up</p>
+
+<h1>Javascript code</h1>
+
+<p>This is the full JS code I will use on this example, the first part is just to make the playlist to switch the videos on with the links on the playlist:</p>
+
+<pre><code>function switchVideo(videoSrc) {
+  videoSrc = 'https://' + videoSrc;
+  document.getElementById('FeaturedVideoID').src = videoSrc;
+}
+</code></pre>
+
+<p>Here is the full JS file:</p>
+
+<pre><code>function switchVideo(videoSrc) {
+  videoSrc = 'https://' + videoSrc;
+  document.getElementById('FeaturedVideoID').src = videoSrc;
+}
+function onGoogleLoad() {
+  gapi.client.setApiKey('YOUR_APIKEY');
+  gapi.client.load('youtube', 'v3', function() {
+
+      var request = gapi.client.youtube.playlistItems.list({
+          part: 'snippet',
+          playlistId: 'PLAYLIST_ID_TO_PULL',
+          maxResults: 50
+          });
+
+          request.execute(function(response) {
+
+            var container = $(".responsive-video-list");
+            if(!container[0]) {
+              container = $("&lt;div class='responsive-video-list' /&gt;")
+              $(".bodytext .description").append(container);
+            }
+
+            container.append("&lt;div class=\"featured-video\"&gt;&lt;iframe width=\"100%\" height=\"100%\" src=\"https://www.youtube.com/embed/"+ response.items[0].snippet.resourceId.videoId+"?autoplay=0&amp;amp;rel=0&amp;amp;showinfo=0&amp;amp;modestbranding=1&amp;amp;autohide=1\" frameborder=\"0\" allowfullscreen id=\"FeaturedVideoID\"&gt;&lt;/iframe&gt;&lt;/div&gt;")
+
+
+            var containerlist = $("&lt;ul /&gt;");
+            container.append(containerlist);
+
+            for (var i = 0; i &lt; response.items.length; i++) {
+              console.log(response.items[i].snippet.title + " published at " + response.items[i].snippet.publishedAt)
+
+              containerlist.append("&lt;li&gt;&lt;a onclick=\"switchVideo('www.youtube.com/embed/"+ response.items[i].snippet.resourceId.videoId+"?autoplay=1&amp;amp;rel=0&amp;amp;showinfo=0&amp;amp;modestbranding=1&amp;amp;autohide=1');\" href=\"javascript:void(0);\"&gt; &lt;img src=\"https://img.youtube.com/vi/"+ response.items[i].snippet.resourceId.videoId+"/0.jpg\"&gt;"+response.items[i].snippet.title+"&lt;/a&gt;&lt;/li&gt; ");
+            }
+     });
+ });
+}
+</code></pre>
+
+<h1>HTML code</h1>
+
+<p>The Javascript will look for a <em>div</em> with a class <em>"responsive-video-list"</em> inside a <em>div</em> with a class <em>description</em> that is also inside a <em>div</em> with a class <em>bodytext</em>. If it didn't find the <em>"responsive-video-list"</em> it will create it.</p>
+
+<p>The HTML should look like this:</p>
+
+<pre><code>&lt;html&gt;
+&lt;head&gt;&lt;/head&gt;
+&lt;body&gt;
+  &lt;div class="bodytext"&gt;
+    &lt;div class="description"&gt;
+      &lt;div class="responsive-video-list"&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>or at least something like this:</p>
+
+<pre><code>&lt;html&gt;
+&lt;head&gt;&lt;/head&gt;
+&lt;body&gt;
+  &lt;div class="bodytext"&gt;
+    &lt;div class="description"&gt;
+
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>For this example we will use the following HTML:</p>
+
+<pre><code>&lt;html&gt;
+&lt;head&gt;
+&lt;script src="js/script.js"&gt;&lt;/script&gt;
+&lt;script src="https://code.jquery.com/jquery-2.1.1.min.js"&gt;&lt;/script&gt;
+&lt;link rel="stylesheet" type="text/css" media="all" href="css/global.css" /&gt;&lt;/head&gt;
+&lt;script src="https://apis.google.com/js/client.js?onload=onGoogleLoad"&gt;&lt;/script&gt;
+&lt;div class="bodytext"&gt;
+  &lt;div class="description"&gt;
+    &lt;div class="responsive-video-list"&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<h1>CSS code</h1>
+
+<p>The following code will make the playlist look great and also responsive:</p>
+
+<pre><code>.video-wrapper{position:relative;width:100%;height:0;padding-top:56.25%}
+.video-wrapper iframe{position:absolute;width:100%;height:100%;top:0;left:0}
+.responsive-video-list{width:100%;margin:0 auto 1.6em} .responsive-video-list ul{padding:0;margin:0;list-style-type:none}
+.responsive-video-list ul img{display:none;width:60px;height:auto;float:left;margin-right:8px;margin-top:-11px}
+.responsive-video-list ul li{padding:0;margin:0 0 4px;overflow:hidden}
+.responsive-video-list ul a{display:inline-block;background-color:#ebebeb;width:100%;padding:11px;position:relative}
+.responsive-video-list ul a:hover{text-decoration:none !important;background-color:#e0e0e0}
+@media screen and (min-width: 46.875em){
+  .responsive-video-list ul img{display:block}
+  .responsive-video-list ul a{padding:11px 11px 0 0}
+ }
+</code></pre>
+
+
+                <hr>
+
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+    
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+              <center>
+              <div class="googlead">
+                <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+                <!-- danieladelantado.com -->
+                <ins class="adsbygoogle"
+                  style="display:block"
+                  data-ad-client="ca-pub-3817847813514029"
+                  data-ad-slot="9054356392"
+                  data-ad-format="auto"></ins>
+                <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+              </div>
+              <div class="g-person" data-href="https://plus.google.com/+DanielAdelantado" data-layout="landscape"></div></center>
+              <br>
+                <ul class="list-inline text-center">
+                                        <li>
+                        <a href="mailto:dadelantado@gmail.com">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                                                            <li>
+                        <a href="https://github.com/dadelantado">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                                                            <li>
+                        <a href="https://mx.linkedin.com/pub/daniel-adelantado/1b/769/718">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                                                            <li>
+                        <a href="https://www.facebook.com/dadelantado">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                                                            <li>
+                        <a href="https://twitter.com/dan_adelantado">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                                        <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                                        
+
+                </ul>
+
+
+                <p class="copyright text-muted">
+                    Copyright &copy; Daniel Adelantado 2017.
+                    Powered by <a href="http://spress.yosymfony.com/">Spress</a>.
+                </p>
+            </div>
+        </div>
+
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js"></script>
+
+<!-- Highlight JS -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+        
+</body>
+
+</html>

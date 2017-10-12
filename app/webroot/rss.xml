@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Daniel Adelantado</title>
+        <link></link>
+        <description>RSS feed for Daniel Adelantado</description>
+        <atom:link href="/rss.xml" rel="self" type="application/rss+xml" />
+                    <item>
+                <title>HOW TO: Pull a YouTube playlist with Javascript</title>
+                <description><![CDATA[<p>The following code will help you to pull a YouTube playlist with Javascript and will update the playlist automatically every time the page loads up</p>
+
+<h1>Javascript code</h1>
+
+<p>This is the full JS code I will use on this example, the first part is just to make the playlist to switch the videos on with the links on the playlist:</p>
+
+<pre><code>function switchVideo(videoSrc) {
+  videoSrc = 'https://' + videoSrc;
+  document.getElementById('FeaturedVideoID').src = videoSrc;
+}
+</code></pre>
+
+<p>Here is the full JS file:</p>
+
+<pre><code>function switchVideo(videoSrc) {
+  videoSrc = 'https://' + videoSrc;
+  document.getElementById('FeaturedVideoID').src = videoSrc;
+}
+function onGoogleLoad() {
+  gapi.client.setApiKey('YOUR_APIKEY');
+  gapi.client.load('youtube', 'v3', function() {
+
+      var request = gapi.client.youtube.playlistItems.list({
+          part: 'snippet',
+          playlistId: 'PLAYLIST_ID_TO_PULL',
+          maxResults: 50
+          });
+
+          request.execute(function(response) {
+
+            var container = $(".responsive-video-list");
+            if(!container[0]) {
+              container = $("&lt;div class='responsive-video-list' /&gt;")
+              $(".bodytext .description").append(container);
+            }
+
+            container.append("&lt;div class=\"featured-video\"&gt;&lt;iframe width=\"100%\" height=\"100%\" src=\"https://www.youtube.com/embed/"+ response.items[0].snippet.resourceId.videoId+"?autoplay=0&amp;amp;rel=0&amp;amp;showinfo=0&amp;amp;modestbranding=1&amp;amp;autohide=1\" frameborder=\"0\" allowfullscreen id=\"FeaturedVideoID\"&gt;&lt;/iframe&gt;&lt;/div&gt;")
+
+
+            var containerlist = $("&lt;ul /&gt;");
+            container.append(containerlist);
+
+            for (var i = 0; i &lt; response.items.length; i++) {
+              console.log(response.items[i].snippet.title + " published at " + response.items[i].snippet.publishedAt)
+
+              containerlist.append("&lt;li&gt;&lt;a onclick=\"switchVideo('www.youtube.com/embed/"+ response.items[i].snippet.resourceId.videoId+"?autoplay=1&amp;amp;rel=0&amp;amp;showinfo=0&amp;amp;modestbranding=1&amp;amp;autohide=1');\" href=\"javascript:void(0);\"&gt; &lt;img src=\"https://img.youtube.com/vi/"+ response.items[i].snippet.resourceId.videoId+"/0.jpg\"&gt;"+response.items[i].snippet.title+"&lt;/a&gt;&lt;/li&gt; ");
+            }
+     });
+ });
+}
+</code></pre>
+
+<h1>HTML code</h1>
+
+<p>The Javascript will look for a <em>div</em> with a class <em>"responsive-video-list"</em> inside a <em>div</em> with a class <em>description</em> that is also inside a <em>div</em> with a class <em>bodytext</em>. If it didn't find the <em>"responsive-video-list"</em> it will create it.</p>
+
+<p>The HTML should look like this:</p>
+
+<pre><code>&lt;html&gt;
+&lt;head&gt;&lt;/head&gt;
+&lt;body&gt;
+  &lt;div class="bodytext"&gt;
+    &lt;div class="description"&gt;
+      &lt;div class="responsive-video-list"&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>or at least something like this:</p>
+
+<pre><code>&lt;html&gt;
+&lt;head&gt;&lt;/head&gt;
+&lt;body&gt;
+  &lt;div class="bodytext"&gt;
+    &lt;div class="description"&gt;
+
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>For this example we will use the following HTML:</p>
+
+<pre><code>&lt;html&gt;
+&lt;head&gt;
+&lt;script src="js/script.js"&gt;&lt;/script&gt;
+&lt;script src="https://code.jquery.com/jquery-2.1.1.min.js"&gt;&lt;/script&gt;
+&lt;link rel="stylesheet" type="text/css" media="all" href="css/global.css" /&gt;&lt;/head&gt;
+&lt;script src="https://apis.google.com/js/client.js?onload=onGoogleLoad"&gt;&lt;/script&gt;
+&lt;div class="bodytext"&gt;
+  &lt;div class="description"&gt;
+    &lt;div class="responsive-video-list"&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<h1>CSS code</h1>
+
+<p>The following code will make the playlist look great and also responsive:</p>
+
+<pre><code>.video-wrapper{position:relative;width:100%;height:0;padding-top:56.25%}
+.video-wrapper iframe{position:absolute;width:100%;height:100%;top:0;left:0}
+.responsive-video-list{width:100%;margin:0 auto 1.6em} .responsive-video-list ul{padding:0;margin:0;list-style-type:none}
+.responsive-video-list ul img{display:none;width:60px;height:auto;float:left;margin-right:8px;margin-top:-11px}
+.responsive-video-list ul li{padding:0;margin:0 0 4px;overflow:hidden}
+.responsive-video-list ul a{display:inline-block;background-color:#ebebeb;width:100%;padding:11px;position:relative}
+.responsive-video-list ul a:hover{text-decoration:none !important;background-color:#e0e0e0}
+@media screen and (min-width: 46.875em){
+  .responsive-video-list ul img{display:block}
+  .responsive-video-list ul a{padding:11px 11px 0 0}
+ }
+</code></pre>
+]]></description>
+                <link>/howto/post/2016/01/08/how-to-pull-a-youtube-playlist-with-javascript/</link>
+                <pubDate>Fri, 08 Jan 2016 23:27:27 -0600</pubDate>
+                <guid>/howto/post/2016/01/08/how-to-pull-a-youtube-playlist-with-javascript/</guid>
+            </item>
+                    <item>
+                <title>HOW: I did this blog</title>
+                <description><![CDATA[<p>For a long time, I think like every developer, I had the interest on having a personal blog. I wanted to be known or at least have something to show when someone ask me about my work or projects.</p>
+
+<p>Since I don't have to much time to invest on writting it from scratch I started to look which would be the best of the easiest, popular and free solutions I know, <a href="https://wordpress.com/" target="_blank">Wordpress</a> and <a href="https://www.blogger.com/" target="_blank">Blogger</a>.</p>
+
+<p>Both options are free and very easy to handle, a few clicks and forms filled and you have you blog ready to go. But as everything that is free I started to notice thinks I didn't like.</p>
+
+<p>The basic thinks I didn't like about was the way the handle the code on the posts. The themes were not that great. And even when my name is not common they didn't show in the first pages of Google even when Blogger is from Google.</p>
+
+<h3>OpenShift</h3>
+
+<p>I already had time with and <a href="https://www.openshift.com/" target="_blank">OpenShift</a> account, I used it most of the time to try new thinks or test stuff. To be honest I like it but I never take it too serious.</p>
+
+<p>Making some research I found <a href="http://spress.yosymfony.com/" target="_blank">Spress project</a>, I'm not fully sure if I found it just looking for frameworks or on my Feedly or because I found that OpenShif had a cartridge of it.</p>
+
+<h3>Spress</h3>
+
+<p>After watching what this was about I liked it. They don't have a lot of themes, but most of the ones they have I like it. And they have an easy way to write posts and handle code, which I love!.</p>
+
+<p>So after some documentation read, some tests and one domain bought I had my blog setup even with <a href="http://www.google.com/analytics/" target="_blank">Google Analytics</a>.</p>
+
+<p>I had it for free, I only have 1 gb storage on OpenShift since I'm still using my free account, but I'm planning to scale it as long as I start to write more and run out of space.</p>
+
+<p>I will try to make in the future a How To of the setup I did on OpenShift nad how I work on it.</p>
+]]></description>
+                <link>/articles/2015/09/26/how-i-did-this-blog/</link>
+                <pubDate>Sat, 26 Sep 2015 23:27:27 -0500</pubDate>
+                <guid>/articles/2015/09/26/how-i-did-this-blog/</guid>
+            </item>
+                    <item>
+                <title>HOW TO: Pull all the videos from a YouTube channel</title>
+                <description><![CDATA[<p>The following code will help you to pull all the videos on a YouTube channel to a playlist with Python.</p>
+
+<pre><code>#!/usr/bin/python
+import urllib, json, subprocess, time, sys, getopt
+try:
+    options, remainder = getopt.getopt(sys.argv[1:], 'u:i:h', ['user=', 'id=', 'help'])
+except getopt.GetoptError as err:
+    print(err)
+    print 'Use -i for id or -u for username \n i.e. pull.py -u dadelantado'
+    sys.exit(2)
+
+for opt, arg in options:
+    if opt in ('-u', '--user'):
+        types = 'forUsername'
+        author = arg
+
+    elif opt in ('-i', '--id'):
+        types = 'id'
+        author = arg
+    elif opt in ('-h', '--help'):
+        print 'Use -i for id or -u for username\n\n EXAMPLE:\n  pull.py -u dadelantado'
+        sys.exit(2)
+
+apikey = 'YOUR_API_KEY'
+ind = 0
+
+#1st Part: retreive uploads id, forUsername(with username) or id (channel id)
+inp = urllib.urlopen(r'https://www.googleapis.com/youtube/v3/channels?part=contentDetails&amp;{0}={1}&amp;key={2}'.format( types, author, apikey ) )
+resp = json.load(inp)
+inp.close()
+print "Generating playlist ..."
+uploadsid = resp['items'][0]['contentDetails']['relatedPlaylists']['uploads']
+
+#2nd Part: retreive list of videos
+inp = urllib.urlopen(r'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&amp;playlistId={0}&amp;key={1}&amp;maxResults=50'.format(uploadsid, apikey))
+videolistresp = json.load(inp)
+inp.close()
+videolist = videolistresp['items']
+firstvideo = videolist[ind]['snippet']['resourceId']['videoId']
+
+#3rd Part: Create HTML file
+file = open('playlist.html', 'w')
+file.write('&lt;div class="responsive-video-list"&gt;&lt;div class="featured-video"&gt;&lt;iframe width="100%" height="100%" src="https://www.youtube.com/embed/'+firstvideo+'?autoplay=0&amp;amp;rel=0&amp;amp;showinfo=0&amp;amp;modestbranding=1&amp;amp;autohide=1" frameborder="0" allowfullscreen id="FeaturedVideoID"&gt;&lt;/iframe&gt;&lt;/div&gt;&lt;ul&gt;')
+ind = 0
+for videos in videolist:
+    title = videolist[ind]['snippet']['title'].encode('ascii', 'replace')
+    videoid = videolist[ind]['snippet']['resourceId']['videoId']
+    file.write('&lt;li&gt;&lt;a onclick="switchVideo(\'www.youtube.com/embed/'+videoid+'?autoplay=1&amp;amp;rel=0&amp;amp;showinfo=0&amp;amp;modestbranding=1&amp;amp;autohide=1\');" href="javascript:void(0);"&gt; &lt;img src="http://img.youtube.com/vi/'+videoid+'/0.jpg"&gt;'+title+'&lt;/a&gt;&lt;/li&gt;')
+    ind += 1
+
+file.write('&lt;/ul&gt;&lt;/div&gt;')
+
+#4th Part: Open HTML file with BBEdit
+print "Opening HMTL file ..."
+time.sleep(3)
+cmd = 'bbedit playlist.html'
+procc = subprocess.Popen(cmd , shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+procc.wait()
+</code></pre>
+]]></description>
+                <link>/articles/2015/09/12/how-to-pull-all-the-videos-from-a-youtube-channel/</link>
+                <pubDate>Sat, 12 Sep 2015 23:27:27 -0500</pubDate>
+                <guid>/articles/2015/09/12/how-to-pull-all-the-videos-from-a-youtube-channel/</guid>
+            </item>
+                    <item>
+                <title>HOW TO: Compare content on 2 HTML files with Python</title>
+                <description><![CDATA[<p>The following code will help you to compare the content between two HTML files with Python.</p>
+
+<pre><code>import os
+from bs4 import BeautifulSoup
+def getfiles(path1, path2):
+
+    #Load files on root of path1 on files1
+    for root, dir, names in os.walk(path1):
+        files1 = names
+        break #Will break the for to read just the root folder
+
+    #Load files on root of path2 on files2
+        for root, dir, names in os.walk(path2):
+        files2 = names
+        break #Will break the for to read just the root folder
+
+
+    #Compares the two list of files and select files with the same name on both paths
+    interfiles = set(files1).intersection(files2)
+
+    #Select just HTML files on mylist
+    mylist = [ fi for fi in interfiles if fi.endswith('.html')]
+
+
+    print '\nI will check:', len(mylist), 'files in total... HOLD ON!\n'
+    return mylist
+
+
+def checkcontent(path1, path2):
+
+    #Get files from both paths
+    mylist = getfiles(path1, path2)
+
+    difcontent = 0
+    diftitles = 0
+    titles = []
+    notitles = []
+
+    print '='*50
+    print 'Files With Different Content'
+    print '='*50
+
+
+    for files in mylist:
+
+        #Select files on path1 and add them to the sooup
+        htmlDoc = open (path1+files, 'r+')
+        soup1 = BeautifulSoup(htmlDoc.read())
+
+        #Select div class description inside div class bodytext
+        find1 = soup1.select('.bodytext .description')
+
+        #Select H3 tags
+        header1 = soup1.h3
+
+        #Select files on path2 and add them to the sopu
+        htmlDoc = open (path2+files, 'r+')
+        soup2 = BeautifulSoup(htmlDoc.read())
+
+        #Select div class description inside div class bodytext
+        find2 = soup2.select('.bodytext .description')
+
+        #Select H1 tag
+        header2 = soup2.h1
+
+        #Check if the are H1 and H3 tags
+        if (header2 == None or header1 == None):
+            notitles.append(files)
+
+        #Compares headers
+        else:
+            for headers in header1:
+                h1 = headers
+            for headers2 in header2:
+                h3 = headers2
+            if not h1 == h3:
+                titles.append(files)
+                diftitles += 1
+
+        #Read lines on HTML files
+        for lines1 in find1:
+            l = lines1
+        for lines2 in find2:
+            n = lines2
+
+        #Compares content
+        if not l == n:
+            print files
+            difcontent += 1
+
+    #Print results
+    print '\n'
+    print '='*50
+    print 'Files With No Title'
+    print '='*50
+
+    for lines in notitles:
+        print lines
+
+    print '\n'
+    print '='*50
+    print 'Files With Different Titles'
+    print '='*50
+
+    for lines in titles:
+        print lines
+
+    print "\nI've found", difcontent, 'files with different content'
+    print "I've found", diftitles, 'different titles'
+
+def main():
+
+    mypath = "PATH_TO_FOLDER1"
+    mypath2 = "PATH_TO_FOLDER2"
+
+    checkcontent(mypath, mypath2)
+
+
+if __name__ == "__main__":
+    main()
+</code></pre>
+]]></description>
+                <link>/articles/2015/09/05/how-to-compare-content-on-2-html-files-with-python/</link>
+                <pubDate>Sat, 05 Sep 2015 23:27:27 -0500</pubDate>
+                <guid>/articles/2015/09/05/how-to-compare-content-on-2-html-files-with-python/</guid>
+            </item>
+            </channel>
+</rss>

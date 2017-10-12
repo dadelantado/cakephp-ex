@@ -1,0 +1,48 @@
+---
+layout: page
+title: "About"
+description: "This is me ..."
+header_img:
+  url: "img/about-bg.jpg"
+---
+
+<h4>Hi! My name is Daniel.</h4>
+<p>I have a Computer Science degree and a lot of customer service experience</p>
+<p>My experience stared at the age of 15 when I started my own business assambling and selling computers</p>
+<p>At the age of 20 I started to work in a hotel as bellboy. 2 years later I was promoted to front desk clerk, and after 6 months I was promoted to auditor and night manager.</p>
+<p>After 4.5 years working in a hotel, just after I finished my studies in the university, I started to work on my current work as Help Desk Engineer giving support to lawyers' websites.</p>
+<p>I provide support directly to them via email through Sugar CRM and Cerb, most of the requires are related to update their websites which also include the use of HTML, CSS and Javascript.</p>
+<p>I'm also part of the media team, handling requests related to YouTube. One of the most difficult part of this was one time that I had to explain to a lawyer how to embed a YouTube video to his site through our CMS which is a little hard to use.</p>
+<hr>
+<h4>The Scenario Where I Had To Say "No" To A Client</h4>
+<p>The worst case was when I was working as Night Manager in a hotel. We were completely full and overbooked. For this we rent an small motel near the hotel, which rooms were mounted just like the ones on the hotel, but it's still different from a 5 stars hotel right?</p>
+<p>So I had to receive several client which had been moved to the motel. I had a client who was really upset because he didn't wanted to stay on a motel. So I had to talk to him and tried to convice him to take the motel room since all the hotel in the town were full. I started explaining him that he cleaned and mounted the rooms just like the hotel, then I promised him that we will have his hotel room available by the next day including a breakfast coupon, but he was still upset because he was a regular guest. So I keep talking to him always letting him know that I knew he was a regular guest, that we were deeply sorry about this but also his reservation was made too late (so it was actually not our fault). So after a lot of negotiation the only way that I could calm him and he was so happy with, was because I offered him a free massage on our spa for the next day.</p>
+<hr>
+<p>I don't believe the client is always right, however I do believe that we have always to do our best to make the things right for them. Even when they are not right, there's always a way to help them.</p>
+<hr>
+<h4>Aaaand here's my favorite GIF!!</h4>
+<img src="http://i.imgur.com/E8Ng9Zz.gif">
+<hr>
+
+<h4>1. PRE-SALES</h4>
+<p>Hi,</p>
+<p>Unfortunately our app doesn't allow live image previews. However, we have this other advantages over <em>Product Customizer</em>:</p>
+<p><em>List of Features</em></p>
+<p>We are also improving our app and we have this feature on our to-do list for the future update</p>
+<h4>2. FIRE ALARM</h4>
+<ol>
+<li>Try to figure out what seems to be the problem and check if I can fix it fast</li>
+<li>If it's not a problem that I can fix in a fast way I would notify the clients that we are working on fix the issue and at the same time I would contact to someone else that could help me to fix it.</li>
+<li>I would work with anyone who is fixing the issue so I can notify the clients as soon as it is fixed</li>
+</ol>
+<h4>3. STEP-BY-STEP</h4>
+<ol>
+  <li>I went to http://yeti.com/</li>
+  <li>On the website I went to "Products" justs at the left of the "YETI" logo to see the dropdown menu.</li>
+  <li>On the dropdown menu I clicked on "Rambler" icon.</li>
+  <li>I scroll down a little bit to find the "Colster" and clicked on it</li>
+  <li>Checked that it was the right one and clicked on "GET IT" button at the right of the price</li>
+  <li>Select how many I need on the left side and clicked on "ADD TO CART" button on the right side</li>
+  <li>I placed the mouse at the top of the page where it says "1 ITEM IN YOUR CART" and clicked on "CHECK OUT" button</li>
+  <li>Filled up the forms and clicked in "ORDER" button</li>
+</ol>
